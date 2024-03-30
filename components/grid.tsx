@@ -9,7 +9,7 @@ export const Grid = () => {
 
   return (
     <div className="h-full w-2/3 border flex items-center justify-center bg-cyan-800/70">
-      <div className="w-[700px] h-[700px] border rounded-lg overflow-hidden shadow-lg bg-white">
+      <div className="w-[70%] h-[70%] border rounded-lg overflow-hidden shadow-lg bg-white">
         {Array(6)
           .fill(null)
           .map((_, i) => {
@@ -23,14 +23,18 @@ export const Grid = () => {
                         key={j}
                         className="w-1/6 flex items-center justify-center border"
                       >
-                        {cordinates.has(i * 6 + j) && (
-                          <Image
-                            src="/hash.png"
-                            alt="hash"
-                            width={30}
-                            height={30}
-                          />
-                        )}
+                        {cordinates.has(i * 6 + j) ? (
+                          cordinates.get(i * 6 + j) === -1 ? (
+                            <Image
+                              src="/hash.png"
+                              alt="hash"
+                              width={30}
+                              height={30}
+                            />
+                          ) : (
+                            cordinates.get(i * 6 + j)
+                          )
+                        ) : null}
                       </div>
                     );
                   })}

@@ -22,14 +22,16 @@ import { toast } from "sonner";
 interface GridInputProps {
   imageUrl: string;
   label: string;
+  hasWeight?: boolean;
 }
 
 const formSchema = z.object({
   xCord: z.string(),
   yCord: z.string(),
+  weight: z.string().optional(),
 });
 
-export const GridInput = ({ imageUrl, label }: GridInputProps) => {
+export const GridInput = ({ imageUrl, label, hasWeight }: GridInputProps) => {
   const setCoordinates = useSetRecoilState(grid);
   const router = useRouter();
 
@@ -38,13 +40,13 @@ export const GridInput = ({ imageUrl, label }: GridInputProps) => {
     defaultValues: {
       xCord: "",
       yCord: "",
+      weight: "",
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const { xCord, yCord } = values;
-
-    const isValid = isValidCordinates(xCord, yCord);
+    const { xCord, yCord, weight } = values;
+    const isValid = isValidCordinates(xCord, yCord, weight);
 
     if (!isValid) {
       toast.error("Invalid coordinates!, please enter again");
@@ -52,9 +54,14 @@ export const GridInput = ({ imageUrl, label }: GridInputProps) => {
     }
     const xVal = parseInt(xCord);
     const yVal = parseInt(yCord);
+    let wVal = 0;
+
+    if (weight) wVal = parseInt(weight);
 
     const gridValue = xVal * 6 + yVal;
-    setCoordinates((cord) => cord.set(gridValue, 1));
+    hasWeight
+      ? setCoordinates((cord) => cord.set(gridValue, wVal))
+      : setCoordinates((cord) => cord.set(gridValue, -1));
     router.refresh();
     form.reset();
   };
@@ -89,6 +96,20 @@ export const GridInput = ({ imageUrl, label }: GridInputProps) => {
                 </FormItem>
               )}
             />
+            {hasWeight && (
+              <FormField
+                control={form.control}
+                name="weight"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Weight</FormLabel>
+                    <FormControl>
+                      <Input placeholder="value" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
           <Button type="submit" className="w-full" variant="outline">
             Add +
