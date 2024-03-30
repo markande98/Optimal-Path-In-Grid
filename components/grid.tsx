@@ -1,7 +1,7 @@
 export const Grid = () => {
   return (
-    <div className="h-full w-2/3 border flex items-center justify-center">
-      <div className="w-[700px] h-[700px] border rounded-md shadow-lg">
+    <div className="h-full w-2/3 border flex items-center justify-center bg-cyan-800/70">
+      <div className="w-[700px] h-[700px] border rounded-lg overflow-hidden shadow-lg bg-white">
         {Array(6)
           .fill(null)
           .map((_, i) => {
@@ -14,9 +14,7 @@ export const Grid = () => {
                       <div
                         key={j}
                         className="w-1/6 flex items-center justify-center border"
-                      >
-                        {i}-{j}
-                      </div>
+                      ></div>
                     );
                   })}
               </div>
