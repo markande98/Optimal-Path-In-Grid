@@ -1,9 +1,6 @@
 "use client";
 
-import * as z from "zod";
-import { Heading } from "./heading";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,7 +9,15 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { grid } from "@/store/atoms/grid";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
+import * as z from "zod";
+import { Heading } from "./heading";
+import { useRouter } from "next/navigation";
+import { isValidCordinates } from "@/lib/check";
+import { toast } from "sonner";
 
 interface GridInputProps {
   imageUrl: string;
@@ -25,6 +30,9 @@ const formSchema = z.object({
 });
 
 export const GridInput = ({ imageUrl, label }: GridInputProps) => {
+  const setCoordinates = useSetRecoilState(grid);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,7 +42,20 @@ export const GridInput = ({ imageUrl, label }: GridInputProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    const { xCord, yCord } = values;
+
+    const isValid = isValidCordinates(xCord, yCord);
+
+    if (!isValid) {
+      toast.error("Invalid coordinates!, please enter again");
+      return;
+    }
+    const xVal = parseInt(xCord);
+    const yVal = parseInt(yCord);
+
+    const gridValue = xVal * 6 + yVal;
+    setCoordinates((cord) => cord.set(gridValue, 1));
+    router.refresh();
     form.reset();
   };
 
@@ -51,7 +72,7 @@ export const GridInput = ({ imageUrl, label }: GridInputProps) => {
                 <FormItem>
                   <FormLabel>X-Cordinate</FormLabel>
                   <FormControl>
-                    <Input placeholder="enter cordinate" {...field} />
+                    <Input placeholder="0-based" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -63,7 +84,7 @@ export const GridInput = ({ imageUrl, label }: GridInputProps) => {
                 <FormItem>
                   <FormLabel>Y-Cordinate</FormLabel>
                   <FormControl>
-                    <Input placeholder="enter cordinate" {...field} />
+                    <Input placeholder="0-based" {...field} />
                   </FormControl>
                 </FormItem>
               )}
