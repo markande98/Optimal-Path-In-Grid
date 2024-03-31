@@ -9,15 +9,15 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { isValidCordinates } from "@/lib/check";
 import { grid } from "@/store/atoms/grid";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
+import { toast } from "sonner";
 import * as z from "zod";
 import { Heading } from "./heading";
-import { useRouter } from "next/navigation";
-import { isValidCordinates } from "@/lib/check";
-import { toast } from "sonner";
 
 interface GridInputProps {
   imageUrl: string;
@@ -49,12 +49,23 @@ export const GridInput = ({ imageUrl, label, hasWeight }: GridInputProps) => {
     const isValid = isValidCordinates(xCord, yCord, weight);
 
     if (!isValid) {
-      toast.error("Invalid coordinates!, please enter again");
+      toast.error("Invalid coordinates or weight!, please enter again");
       return;
     }
     const xVal = parseInt(xCord);
     const yVal = parseInt(yCord);
     let wVal = 0;
+
+    if (xVal == 0 && yVal == 0) {
+      toast.error("Can't put weight at the source, try another coordinates");
+      return;
+    }
+    if (xVal == 5 && yVal == 5) {
+      toast.error(
+        "Can't put weight at the destination, try another coordinates"
+      );
+      return;
+    }
 
     if (weight) wVal = parseInt(weight);
 

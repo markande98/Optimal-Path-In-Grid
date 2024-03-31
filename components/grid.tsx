@@ -34,7 +34,13 @@ export const Grid = () => {
                           ) : (
                             cordinates.get(i * 6 + j)
                           )
-                        ) : null}
+                        ) : i == 0 && j == 0 ? (
+                          <h1 className="text-2xl font-bold">S</h1>
+                        ) : i == 5 && j == 5 ? (
+                          <h1 className="text-2xl font-bold">D</h1>
+                        ) : (
+                          1
+                        )}
                       </div>
                     );
                   })}

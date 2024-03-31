@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
 export const grid = atom({
-  key: "gridCordinates",
+  key: "gridCoordinates",
   default: new Map<number, number>(),
 });
