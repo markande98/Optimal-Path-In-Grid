@@ -5,6 +5,17 @@ export const grid = atom({
   default: new Map<number, number>(),
 });
 
+export const optimalTracePath = atom({
+  key: "optimalPath",
+  default: selector({
+    key: "pathSelector",
+    get: ({ get }) => {
+      let ans: number[][] = [];
+      return ans;
+    },
+  }),
+});
+
 export const gridSelector = selector({
   key: "gridSelector",
   get: ({ get }) => {
