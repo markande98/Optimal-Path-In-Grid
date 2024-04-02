@@ -18,9 +18,10 @@ import { useSetRecoilState } from "recoil";
 import { toast } from "sonner";
 import * as z from "zod";
 import { Heading } from "./heading";
+import { LucideIcon } from "lucide-react";
 
 interface GridInputProps {
-  imageUrl: string;
+  icon: LucideIcon;
   label: string;
   hasWeight?: boolean;
 }
@@ -31,7 +32,7 @@ const formSchema = z.object({
   weight: z.string().optional(),
 });
 
-export const GridInput = ({ imageUrl, label, hasWeight }: GridInputProps) => {
+export const GridInput = ({ icon, label, hasWeight }: GridInputProps) => {
   const setCoordinates = useSetRecoilState(grid);
   const router = useRouter();
 
@@ -79,7 +80,7 @@ export const GridInput = ({ imageUrl, label, hasWeight }: GridInputProps) => {
 
   return (
     <div className="w-full px-6 py-4 space-y-4">
-      <Heading imageUrl={imageUrl} label={label} />
+      <Heading icon={icon} label={label} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex items-center justify-between gap-x-4">

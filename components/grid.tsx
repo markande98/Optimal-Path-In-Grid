@@ -10,9 +10,8 @@ export const Grid = () => {
   const coordinates = useRecoilValue(gridSelector);
   const pathCoordinates = useRecoilValue(optimalTracePath);
 
-  console.log(pathCoordinates);
   return (
-    <div className="h-full w-2/3 border flex items-center justify-center bg-cyan-800/70">
+    <div className="h-1/2 md:h-full w-full md:w-2/3 border flex items-center justify-center bg-cyan-800/70">
       <div className="w-[70%] h-[70%] border rounded-lg overflow-hidden shadow-lg bg-white">
         {Array(6)
           .fill(null)
@@ -29,7 +28,8 @@ export const Grid = () => {
                           "w-1/6 flex items-center justify-center border",
                           pathCoordinates.findIndex(
                             (coord) => coord[0] === i && coord[1] === j
-                          ) !== -1 && "bg-black text-white"
+                          ) !== -1 &&
+                            "bg-black text-white transition-colors duration-700"
                         )}
                       >
                         {i * 6 + j == 0 ? (
