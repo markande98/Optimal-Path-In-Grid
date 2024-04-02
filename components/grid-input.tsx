@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { isValidCordinates } from "@/lib/check";
-import { grid } from "@/store/atoms/grid";
+import { grid, optimalTracePath } from "@/store/atoms/grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -34,6 +34,7 @@ const formSchema = z.object({
 
 export const GridInput = ({ icon, label, hasWeight }: GridInputProps) => {
   const setCoordinates = useSetRecoilState(grid);
+  const setOptimalPath = useSetRecoilState(optimalTracePath);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,7 +68,8 @@ export const GridInput = ({ icon, label, hasWeight }: GridInputProps) => {
       );
       return;
     }
-
+    const ans: number[][] = [];
+    setOptimalPath(ans);
     if (weight) wVal = parseInt(weight);
 
     const gridValue = xVal * 6 + yVal;
